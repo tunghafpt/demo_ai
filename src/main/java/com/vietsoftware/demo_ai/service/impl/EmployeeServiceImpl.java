@@ -32,6 +32,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeEntity addEmployee(EmployeeEntity employee) {
+        // Validate employee data before saving
+        if (employee.getName() == null || employee.getName().isEmpty()) {
+            throw new RuntimeException("Employee name cannot be empty");
+        }
         return employeeRepository.save(employee);
     }
 
