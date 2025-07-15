@@ -1,5 +1,6 @@
 package com.vietsoftware.demo_ai.service.impl;
 
+import com.vietsoftware.demo_ai.constants.AppConstants;
 import com.vietsoftware.demo_ai.mapper.EmployeeMapper;
 import com.vietsoftware.demo_ai.model.EmployeeEntity;
 import com.vietsoftware.demo_ai.repository.EmployeeRepository;
@@ -26,7 +27,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         try {
             return employeeRepository.findById(id).orElse(null);
         } catch (Exception ex) {
-            throw new RuntimeException("Error fetching employee", ex);
+            throw new RuntimeException(AppConstants.ERROR_FETCHING_EMPLOYEE, ex);
         }
     }
 
@@ -34,7 +35,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeEntity addEmployee(EmployeeEntity employee) {
         // Validate employee data before saving
         if (employee.getName() == null || employee.getName().isEmpty()) {
-            throw new RuntimeException("Employee name cannot be empty");
+            throw new RuntimeException(AppConstants.EMPLOYEE_NAME_EMPTY);
         }
         return employeeRepository.save(employee);
     }
@@ -42,13 +43,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeEntity updateEmployee(Integer id, EmployeeRequest request) {
         if (!employeeRepository.existsById(id)) {
-            throw new RuntimeException("Employee not found with id: " + id);
+            throw new RuntimeException(AppConstants.EMPLOYEE_NOT_FOUND + id);
         }
         try {
             EmployeeEntity employee = EmployeeMapper.INSTANCE.toEntity(request);
             return employeeRepository.save(employee);
         } catch (Exception e) {
-            throw new RuntimeException("Error updating employee: " + e.getMessage(), e);
+            throw new RuntimeException(AppConstants.ERROR_UPDATING_EMPLOYEE + e.getMessage(), e);
         }
     }
 
